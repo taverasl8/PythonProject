@@ -1,0 +1,5 @@
+{
+        "Audio":[".mp3",".wav"],
+        "Video":[".mp4"],
+        "Images":[".png",".jpg",".jpeg"]
+}
