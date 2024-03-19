@@ -1,0 +1,93 @@
+import os
+import shutil
+import json
+from cryptography.fernet import Fernet
+
+# Function to load configuration from file
+def load_configuration(config_file):
+    if os.path.exists(config_file):
+        with open(config_file, 'r') as f:
+            return json.load(f)
+    else:
+        # Default configuration
+        return {
+            "folders": {
+                "images": ["jpg", "png", "gif"],
+                "documents": ["pdf", "doc", "docx", "txt"],
+                "videos": ["mp4", "avi", "mkv"],
+                "others": []
+            }
+        }
+
+# Function to encrypt/decrypt data
+def encrypt_decrypt_data(data, key, encrypt=True):
+    cipher = Fernet(key)
+    if encrypt:
+        return cipher.encrypt(data.encode())
+    else:
+        return cipher.decrypt(data).decode()
+
+# Function to sort files based on extension
+def sort_files(source_dir, config):
+    if not os.path.exists(source_dir):
+        print("Source directory does not exist.")
+        return
+
+    for filename in os.listdir(source_dir):
+        file_extension = filename.split('.')[-1].lower()
+        destination_folder = None
+        for folder, extensions in config["folders"].items():
+            if file_extension in extensions:
+                destination_folder = folder
+                break
+        else:
+            destination_folder = "others"
+
+        destination_dir = os.path.join(source_dir, destination_folder)
+        if not os.path.exists(destination_dir):
+            os.makedirs(destination_dir)
+
+        source_file = os.path.join(source_dir, filename)
+        destination_file = os.path.join(destination_dir, filename)
+
+        # Encrypt file
+        key = Fernet.generate_key()
+        with open(source_file, 'rb') as f:
+            encrypted_data = encrypt_decrypt_data(f.read(), key)
+
+        with open(destination_file, 'wb') as f:
+            f.write(encrypted_data)
+
+        print(f"Moved '{filename}' to '{destination_folder}' folder.")
+
+# Main function
+def main():
+    source_dir = input("Enter the source directory: ")
+    config_file = input("Enter the path to the configuration file: ")
+
+    config = load_configuration(config_file)
+
+    sort_files(source_dir, config)
+
+if __name__ == "__main__":
+    main()
+
+
+
+
+
+
+
+
+
+
+
+
+
+# This Python script will:
+# Prompt the user to input the source directory and the path to the configuration file.
+# Load the configuration from the specified file or use a default configuration if the file is missing.
+# Sort files in the source directory based on their extensions according to the configuration.
+# Encrypt each file before moving it to the appropriate folder.
+    
+    # will need to install the cryptography library ('pip install cryptography') to enable encryptions.
