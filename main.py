@@ -167,11 +167,54 @@ def folder_creation(configuration):
 def get_files(folder_path):
     """
     This Function takes in a directory and returns the files in the directory if any
-
     """
+    files = []
+
+    # List of everything in the folder
+    folder_contents = os.listdir(folder_path)
+    # print(folder_contents)
+    # First lets remove possible subfolders in the list of files
+    
+    for contents in folder_contents:
+        # item_path is the direct path to the file
+        item_path = os.path.join(folder_path, contents)
+
+        if os.path.isfile(item_path):
+            files.append(f'{item_path}')
 
 
-    return
+
+    # print(files)
+
+
+    return files
+
+
+def get_folders(folder_path):
+    folders = []
+
+    folder_contents = os.listdir(folder_path)
+
+
+    for contents in folder_contents:
+        # item_path is the direct path to the file
+        item_path = os.path.join(folder_path, contents)
+
+
+        if os.path.isdir(item_path):
+            folders.append(f'{contents}')
+
+
+
+
+
+    return folders
+
+
+
+
+
+
 
 
 
@@ -212,12 +255,20 @@ def main():
 
     """STEP 3 Foler Creation"""
     # based on the config{} check to see if folders are created if they are not create them
-    
+    # First Check if folders exist
+    # if folders exist then don't do anything
+
+    folders = get_folders(folderDir)
+    print(folders)
 
     
     """STEP 4 List out all the files"""
+    files = get_files(folderDir)
+    print(files)
     
 
+    
+    
 
     """STEP 5 Moving Files to Correct Folder"""
 
