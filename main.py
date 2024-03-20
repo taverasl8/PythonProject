@@ -213,6 +213,25 @@ def main():
     """STEP 3 Foler Creation"""
     # based on the config{} check to see if folders are created if they are not create them
     
+    import os
+    def folder_creation(configuration, folder_path):
+        """
+        Create folders based on the configuration if they do not already exist.
+        
+        Parameters:
+        configuration(dict): Configuration specifying folder names and file extensions.
+        folder_path(str): Path of the directory where folders will be created.
+        """
+        for folder_name in configuration.keys():
+            folder_directory = os.path.join(folder_path, folder_name)
+            # Check if folder exsist, if not create it
+            if not os.path.exists(folder_directory):
+                os.makedirs(folder_directionary)
+                print(f"Create folder: {folder_name} at {folder_directory}")
+            else:
+                print(f"Folder {folder_name} already exists at {folder_directory}")
+
+    folder_creation(config['folders'], folderDir)
 
     
     """STEP 4 List out all the files"""
